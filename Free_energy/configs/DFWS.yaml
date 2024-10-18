@@ -1,0 +1,40 @@
+OUTPUT_DIR: 'results/'
+
+INPUT:
+  SIZE: (256, 256)
+  CROP_SIZE: (224, 224)
+  SOURCE_TRANSFORMS: ('center_crop', 'normalize')
+  TARGET_TRANSFORMS: ('center_crop', 'normalize')
+  TEST_TRANSFORMS: ('center_crop', 'normalize')
+  PIXEL_MEAN: [0.525, 0.491, 0.852] # DFAR [0.525, 0.491, 0.852]  |  Widar [0.041, 0.078, 0.555] |  RSHA [0.043, 0.087, 0.541]
+  PIXEL_STD: [0.353, 0.384, 0.128]  # DFAR [0.353, 0.384, 0.128]  |  Widar [0.176, 0.236, 0.173]  | RSHA [0.179, 0.251, 0.173]
+
+DATASET:
+  ROOT: 'data/list/'
+  NAME: 'DFAR'
+  SOURCE_DOMAINS: ['O1','O2','O3','O4']
+  TARGET_DOMAINS: ['O1','O2','O3','O4']
+  NUM_CLASS: 7
+
+DATALOADER:
+  SOURCE:
+    BATCH_SIZE: 64
+  TARGET:
+    BATCH_SIZE: 64
+  TEST:
+    BATCH_SIZE: 64
+TRAIN:
+  PRINT_FREQ: 10
+
+OPTIM:
+  NAME: 'Adam'
+  LR: 0.0005 #0.1
+  BASE_LR_MULT: 0.1
+
+TRAINER:
+  NAME: 'EADA'
+  MAX_EPOCHS: 50
+  ENERGY_ALIGN_WEIGHT: 0.05 # 0.05
+  ENERGY_ALIGN_TYPE: 'max' # 'l1' or 'mse' or 'max'
+  FIRST_SAMPLE_RATIO: 0.5
+SEED: 0
